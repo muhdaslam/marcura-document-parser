@@ -14,9 +14,20 @@ dependencies = [
     "PyMuPDF>=1.24.0",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
 [project.scripts]
 charter-extract = "charter_parser.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["charter_parser*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+# PyMuPDF (fitz) ships SWIG bindings that trigger DeprecationWarning on Python 3.14+ import.
+filterwarnings = [
+    "ignore:builtin type .* has no __module__ attribute:DeprecationWarning",
+]

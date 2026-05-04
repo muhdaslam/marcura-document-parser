@@ -59,6 +59,35 @@ Useful CLI options:
 - Structured clauses JSON: path from `--output` (default folder: project `output/`, default file `clauses.json`)
 - Debug log: same directory as the JSON file, named `debug_extraction.log`
 
+
+
+### Running tests
+
+Install optional dev dependencies (includes pytest), then run the suite from the project root:
+
+```bash
+pip install -e ".[dev]"
+python -m pytest tests/
+```
+
+PyMuPDF-related `DeprecationWarning` noise from the extension on some Python versions is filtered in `pyproject.toml` so test output stays readable.
+
+## Tests
+
+Automated tests live under `tests/` (34 cases). They do not call the live Anthropic API except where the client is mocked.
+
+
+| File                  | Scope                                                                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `test_models.py`      | Pydantic `Clause` and `ClauseCollection`: valid payloads, `extra="forbid"` rejection                                           |
+| `test_cli.py`         | `resolve_output_path` (absolute, relative with parent, bare filename → `output/`), `parse_args` defaults and overrides         |
+| `test_chunking.py`    | Clause-boundary chunking: `heading_start`, `clause_starts`, `chunk_text`, `split_half`                                         |
+| `test_json_parse.py`  | `extract_json`: empty input, fenced markdown JSON, preamble before `{`, invalid JSON, non-object top-level                     |
+| `test_postprocess.py` | `dedupe_clauses`, `merge_adjacent_same_id`, `merge_continuations`, `strip_strikethrough`                                       |
+| `test_pdf_parser.py`  | `CharterPDFParser` strike-through geometry helpers, `_normalize_text`, `_join_multiline_headings`, minimal PDF `extract_pages` |
+| `test_extractor.py`   | `ClauseExtractor` with mocked `messages.stream`: JSON → clauses, `...` id → `__cont__`, full `extract` merge path              |
+
+
 ## Project structure
 
 ```text
@@ -79,6 +108,7 @@ charter_parser/
     prompt.py
     logutil.py
 main.py
+tests/
 pyproject.toml
 requirements.txt
 ```
