@@ -31,13 +31,17 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Usage
-
-From project root, any of these are equivalent:
+### Export ANTHROPIC_API_KEY
 
 ```bash
 export ANTHROPIC_API_KEY="your-anthropic-key"
-python -m charter_parser
+```
+
+## Run the app
+
+From project root:
+
+```bash
 python main.py
 ```
 
@@ -58,8 +62,6 @@ Useful CLI options:
 
 - Structured clauses JSON: path from `--output` (default folder: project `output/`, default file `clauses.json`)
 - Debug log: same directory as the JSON file, named `debug_extraction.log`
-
-
 
 ### Running tests
 
